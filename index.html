@@ -44,22 +44,16 @@
     overflow: hidden;
     z-index: -1;
   }
-  .lux-layer{position:absolute;inset:-8%;background-repeat:repeat;will-change:transform;}
+  .lux-layer{position:absolute;inset:-8%;background-repeat:repeat;}
   .lux-layer-a{
     background-image:url("assets/gold-pattern.svg");
     background-size:520px 520px;
     animation:luxZoom 20s linear infinite, luxBreathe 12s ease-in-out infinite;
     opacity:.9;
   }
-  .lux-layer-b{
-    background-image:url("assets/gold-pattern.svg");
-    background-size:760px 760px;background-position:120px 80px;
-    animation:luxZoom 27s linear infinite reverse;
-    opacity:.28;mix-blend-mode:soft-light;filter:brightness(1.35) contrast(1.1);
-  }
-  .lux-beams{position:absolute;inset:0;mix-blend-mode:screen;opacity:.5;pointer-events:none;}
+  .lux-beams{position:absolute;inset:0;mix-blend-mode:screen;opacity:.4;pointer-events:none;}
   .lux-beam{
-    position:absolute;top:-20%;bottom:-20%;filter:blur(1px);
+    position:absolute;top:-20%;bottom:-20%;
     background:linear-gradient(105deg,transparent 0%,rgba(255,235,150,0) 35%,rgba(255,255,220,.5) 49%,rgba(255,215,80,.28) 53%,transparent 68%);
     animation:luxSweep 13s cubic-bezier(.45,0,.55,1) infinite;
   }
@@ -70,11 +64,6 @@
     background:linear-gradient(110deg,transparent 35%,rgba(212,175,55,.1) 48%,rgba(255,236,150,.16) 50%,rgba(212,175,55,.1) 52%,transparent 65%);
     background-size:200% 100%;
     animation:luxSweep2 18s linear infinite;
-  }
-  .lux-grain{
-    position:absolute;inset:-20%;pointer-events:none;opacity:.03;mix-blend-mode:soft-light;
-    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    animation:luxGrain .5s steps(4) infinite;
   }
   .lux-vignette{
     position:absolute;inset:0;pointer-events:none;
@@ -101,15 +90,8 @@
     0%{background-position:-200% 0}
     100%{background-position:200% 0}
   }
-  @keyframes luxGrain{
-    0%,100%{transform:translate(0,0)}
-    20%{transform:translate(1%,-1%)}
-    40%{transform:translate(-1%,1%)}
-    60%{transform:translate(1%,1%)}
-    80%{transform:translate(-1%,-1%)}
-  }
   @media (prefers-reduced-motion: reduce){
-    .lux-layer,.lux-beam,.lux-sweep,.lux-grain{animation:none;}
+    .lux-layer,.lux-beam,.lux-sweep{animation:none;}
   }
 
   h1,h2,h3,.brand{font-family:'Cinzel',serif;}
@@ -280,12 +262,11 @@
   }
 
   /* ---- catalogo ---- */
-  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;perspective:1200px;}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;}
   .card{
     background:linear-gradient(160deg, rgba(30,26,20,0.88), rgba(20,18,16,0.88));
     border:1px solid var(--border);padding:46px 32px;border-radius:6px;text-align:center;
     transition:transform .2s ease-out, box-shadow .4s ease, border-color .4s ease;
-    transform-style:preserve-3d;will-change:transform;
   }
   .card:hover{box-shadow:0 20px 40px -18px rgba(212,175,55,0.35);border-color:var(--gold);}
   .card-icon{
@@ -300,12 +281,11 @@
 
   /* ---- galeria ---- */
   .gallery{background:rgba(20,18,16,0.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
-  .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;perspective:1200px;}
+  .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
   .g-item{
     aspect-ratio:4/5;border-radius:6px;position:relative;overflow:hidden;
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
     border:1px solid var(--border);transition:transform .2s ease-out, border-color .4s ease;
-    transform-style:preserve-3d;will-change:transform;
   }
   .g-item:hover{border-color:var(--gold);}
   .g-item svg{width:34px;height:34px;stroke:var(--gold-light);opacity:0.9;}
@@ -373,13 +353,11 @@
 
 <div class="luxury-bg" aria-hidden="true">
   <div class="lux-layer lux-layer-a"></div>
-  <div class="lux-layer lux-layer-b"></div>
   <div class="lux-beams">
     <span class="lux-beam lux-beam-1"></span>
     <span class="lux-beam lux-beam-2"></span>
   </div>
   <div class="lux-sweep"></div>
-  <div class="lux-grain"></div>
   <div class="lux-vignette"></div>
 </div>
 
