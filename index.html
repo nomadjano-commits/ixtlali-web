@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ManuART — Artesanía, Body Painting & Tatuaje</title>
 <meta name="description" content="ManuART — artesanía hecha a mano, body painting y tatuaje. Catálogo digital de un artesano mexicano itinerante.">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -35,6 +36,47 @@
   ::-webkit-scrollbar{width:10px;}
   ::-webkit-scrollbar-track{background:var(--black);}
   ::-webkit-scrollbar-thumb{background:linear-gradient(var(--gold-dark),var(--gold));border-radius:10px;}
+
+  /* ---- luxury gold pattern background ---- */
+  .luxury-bg{
+    position: fixed; inset: 0;
+    background: #070603;
+    overflow: hidden;
+    z-index: -1;
+  }
+  .luxury-bg::before {
+    content:""; position:absolute; inset:-8%;
+    background-image: url("assets/gold-pattern.svg");
+    background-repeat: repeat;
+    background-size: 520px 520px;
+    animation: slowZoom 20.0s linear infinite,
+               breathe 12.0s ease-in-out infinite;
+    will-change: transform;
+  }
+  .luxury-bg::after {
+    content:""; position:absolute; inset:0;
+    background: linear-gradient(110deg, transparent 35%, rgba(212,175,55,0.12) 50%, transparent 65%);
+    background-size: 200% 100%;
+    mix-blend-mode: overlay;
+    animation: shineMove2 18.0s linear infinite;
+    opacity: 0.60;
+  }
+  @keyframes slowZoom {
+    0%{transform:scale(1) translate3d(0,0,0)}
+    50%{transform:scale(1.12) translate3d(-8px,12px,0)}
+    100%{transform:scale(1) translate3d(0,0,0)}
+  }
+  @keyframes breathe {
+    0%,100%{opacity:.88; filter:brightness(1)}
+    50%{opacity:1; filter:brightness(1.15)}
+  }
+  @keyframes shineMove2 {
+    0%{background-position:-200% 0}
+    100%{background-position:200% 0}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .luxury-bg::before, .luxury-bg::after{animation:none;}
+  }
 
   h1,h2,h3,.brand{font-family:'Cinzel',serif;}
   .gold-text{
@@ -86,7 +128,7 @@
     text-align:center;overflow:hidden;
     background:
       radial-gradient(ellipse at 50% 30%, rgba(212,175,55,0.08), transparent 60%),
-      linear-gradient(180deg, var(--black) 0%, var(--black-2) 100%);
+      linear-gradient(180deg, rgba(10,9,8,0.55) 0%, rgba(20,18,16,0.7) 100%);
   }
   .ring{
     position:absolute;border-radius:50%;border:1px solid var(--border);
@@ -145,7 +187,7 @@
   .reveal-scale.visible{opacity:1;transform:scale(1);}
 
   /* ---- about ---- */
-  .about{background:var(--black-2);}
+  .about{background:rgba(20,18,16,0.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
   .about-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:70px;align-items:center;}
   .about-emblem{
     width:100%;aspect-ratio:1;border-radius:50%;position:relative;
@@ -167,7 +209,7 @@
   /* ---- catalogo ---- */
   .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;}
   .card{
-    background:linear-gradient(160deg, var(--black-3), var(--black-2));
+    background:linear-gradient(160deg, rgba(30,26,20,0.88), rgba(20,18,16,0.88));
     border:1px solid var(--border);padding:46px 32px;border-radius:6px;text-align:center;
     transition:transform .4s ease, box-shadow .4s ease, border-color .4s ease;
   }
@@ -183,7 +225,7 @@
   .price small{display:block;font-family:'Poppins',sans-serif;font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:6px;font-weight:400;}
 
   /* ---- galeria ---- */
-  .gallery{background:var(--black-2);}
+  .gallery{background:rgba(20,18,16,0.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
   .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
   .g-item{
     aspect-ratio:4/5;border-radius:6px;position:relative;overflow:hidden;
@@ -206,13 +248,16 @@
   .contact{text-align:center;}
   .contact-box{
     max-width:560px;margin:0 auto;padding:60px 40px;border:1px solid var(--border);border-radius:10px;
-    background:radial-gradient(circle at 50% 0%, rgba(212,175,55,0.08), transparent 60%);
+    background:
+      linear-gradient(rgba(10,9,8,0.6),rgba(10,9,8,0.6)),
+      radial-gradient(circle at 50% 0%, rgba(212,175,55,0.08), transparent 60%);
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
   }
   .contact-box p{color:var(--muted);margin-bottom:34px;}
   .whatsapp-number{display:block;margin-top:22px;color:var(--gold-light);letter-spacing:1px;font-size:0.95rem;}
   .contact-note{margin-top:30px;font-size:0.85rem;color:var(--muted);}
 
-  footer{padding:40px 0;text-align:center;border-top:1px solid var(--border);color:var(--muted);font-size:0.82rem;letter-spacing:1px;}
+  footer{padding:40px 0;text-align:center;border-top:1px solid var(--border);color:var(--muted);font-size:0.82rem;letter-spacing:1px;background:rgba(7,6,3,0.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}
   footer .brand{font-size:1.1rem;display:block;margin-bottom:10px;}
 
   @media (max-width:860px){
@@ -244,6 +289,8 @@
 </style>
 </head>
 <body>
+
+<div class="luxury-bg" aria-hidden="true"></div>
 
 <div id="flowLine"><div id="flowFill"></div></div>
 
