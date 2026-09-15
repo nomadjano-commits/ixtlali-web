@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="520" height="520" viewBox="0 0 520 520">
   <defs>
-    <pattern id="manuart-pattern" width="130" height="130" patternUnits="userSpaceOnUse">
+    <pattern id="ixtlali-pattern" width="130" height="130" patternUnits="userSpaceOnUse">
       <g fill="none" stroke="#d4af37" stroke-width="1">
         <path d="M65 15 L115 65 L65 115 L15 65 Z" opacity="0.45"/>
         <path d="M65 35 L95 65 L65 95 L35 65 Z" opacity="0.35"/>
@@ -16,5 +16,5 @@
       <circle cx="65" cy="65" r="2.4" fill="#d4af37" opacity="0.55"/>
     </pattern>
   </defs>
-  <rect width="520" height="520" fill="url(#manuart-pattern)"/>
+  <rect width="520" height="520" fill="url(#ixtlali-pattern)"/>
 </svg>
