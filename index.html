@@ -673,12 +673,12 @@
     window.scrollTo({top:0, behavior: reduced ? 'auto' : 'smooth'});
   });
 
-  // rune field: cursor-reactive gold symbol swarm (desktop pointer only)
+  // rune field: cursor-reactive gold Aztec symbol swarm (desktop pointer only)
   if(!reduced && fineHover){
     var runeCanvas = document.getElementById('runeField');
     if(runeCanvas){
       var rCtx = runeCanvas.getContext('2d');
-      var R_SHAPES = ['triangle', 'diamond', 'chevron', 'ring', 'step'];
+      var R_SYMBOL_COUNT = 24;
       var R_COUNT = 130;
       var R_INFLUENCE = 170;
       var R_PUSH = 7;
@@ -686,6 +686,33 @@
       var R_DAMPING = 0.82;
       var rWidth, rHeight, rDpr, rParticles = [];
       var rMouseX = -9999, rMouseY = -9999;
+      var rSymbols = [];
+
+      function rTintGold(img){
+        var c = document.createElement('canvas');
+        c.width = img.naturalWidth; c.height = img.naturalHeight;
+        var cx = c.getContext('2d');
+        cx.drawImage(img, 0, 0);
+        cx.globalCompositeOperation = 'source-in';
+        cx.fillStyle = '#f6dd8c';
+        cx.fillRect(0, 0, c.width, c.height);
+        return c;
+      }
+
+      function rLoadSymbols(){
+        var loads = [];
+        for(var i = 1; i <= R_SYMBOL_COUNT; i++){
+          loads.push(new Promise(function(resolve){
+            var img = new Image();
+            img.onload = function(){ resolve(rTintGold(img)); };
+            img.onerror = function(){ resolve(null); };
+            img.src = 'assets/runes/azteca_' + (i < 10 ? '0' + i : i) + '.png';
+          }));
+        }
+        return Promise.all(loads).then(function(tinted){
+          rSymbols = tinted.filter(Boolean);
+        });
+      }
 
       function rScatter(){
         rParticles = [];
@@ -694,10 +721,10 @@
           var baseY = Math.random() * rHeight;
           rParticles.push({
             baseX: baseX, baseY: baseY, x: baseX, y: baseY, vx: 0, vy: 0,
-            size: 8 + Math.random() * 7,
+            size: 16 + Math.random() * 14,
             angle: Math.random() * Math.PI * 2,
             spin: (Math.random() - 0.5) * 0.004,
-            shape: Math.floor(Math.random() * R_SHAPES.length),
+            symbol: Math.floor(Math.random() * rSymbols.length),
             opacityBase: 0.5 + Math.random() * 0.5,
             opacity: 0
           });
@@ -717,35 +744,18 @@
       }
 
       function rDraw(p){
-        if(p.opacity <= 0.01) return;
+        if(p.opacity <= 0.01 || !rSymbols.length) return;
+        var img = rSymbols[p.symbol];
+        var s = p.size;
+        var w = s, h = s * (img.height / img.width);
+        if(h > s){ h = s; w = s * (img.width / img.height); }
         rCtx.save();
         rCtx.translate(p.x, p.y);
         rCtx.rotate(p.angle);
-        rCtx.strokeStyle = 'rgba(246,221,140,' + p.opacity + ')';
-        rCtx.lineWidth = 1.3;
+        rCtx.globalAlpha = p.opacity;
         rCtx.shadowColor = 'rgba(212,175,55,0.6)';
         rCtx.shadowBlur = 4;
-        var s = p.size;
-        rCtx.beginPath();
-        switch(R_SHAPES[p.shape]){
-          case 'triangle':
-            rCtx.moveTo(0,-s/2); rCtx.lineTo(s/2,s/2); rCtx.lineTo(-s/2,s/2); rCtx.closePath();
-            break;
-          case 'diamond':
-            rCtx.moveTo(0,-s/2); rCtx.lineTo(s/2,0); rCtx.lineTo(0,s/2); rCtx.lineTo(-s/2,0); rCtx.closePath();
-            break;
-          case 'chevron':
-            rCtx.moveTo(-s/2,s/3); rCtx.lineTo(0,-s/2); rCtx.lineTo(s/2,s/3);
-            break;
-          case 'ring':
-            rCtx.arc(0,0,s/3,0,Math.PI*2);
-            break;
-          case 'step':
-            rCtx.moveTo(-s/2,s/2); rCtx.lineTo(-s/2,0); rCtx.lineTo(-s/6,0); rCtx.lineTo(-s/6,-s/2);
-            rCtx.lineTo(s/6,-s/2); rCtx.lineTo(s/6,0); rCtx.lineTo(s/2,0); rCtx.lineTo(s/2,s/2);
-            break;
-        }
-        rCtx.stroke();
+        rCtx.drawImage(img, -w/2, -h/2, w, h);
         rCtx.restore();
       }
 
@@ -779,9 +789,12 @@
         rMouseX = e.clientX;
         rMouseY = e.clientY;
       }, {passive:true});
-      window.addEventListener('resize', rResize);
-      rResize();
-      requestAnimationFrame(rTick);
+
+      rLoadSymbols().then(function(){
+        window.addEventListener('resize', rResize);
+        rResize();
+        requestAnimationFrame(rTick);
+      });
     }
   }
 
