@@ -1,6 +1,6 @@
 Add-Type -AssemblyName System.Drawing
 
-$src = "C:\Users\NomadJano\Downloads\circulo_80_exacto.png"
+$src = "C:\Users\NomadJano\Downloads\exacto_160_4000_1500.png"
 $dst = "C:\Users\NomadJano\Desktop\Proyectos Web\Ix'tlali ManuMX\Ix'tlali-web\assets\ring-pattern.png"
 $erosion = 0   # px to erode from each edge of the line, at native source resolution
 
@@ -21,13 +21,26 @@ public static class RingProcessor {
         Marshal.Copy(dataIn.Scan0, bytes, 0, bytes.Length);
         bmp.UnlockBits(dataIn);
 
-        // 1. binary "is dark line" mask from luminance
+        // 1. binary "is dark line" mask: use real alpha if the source has any,
+        //    else fall back to luminance-keying against a flattened white/light bg
+        bool hasAlpha = false;
+        for (int y = 0; y < h && !hasAlpha; y += 7) {
+            for (int x = 0; x < w; x += 7) {
+                if (bytes[y * stride + x * 4 + 3] < 250) { hasAlpha = true; break; }
+            }
+        }
+
         bool[,] dark = new bool[w, h];
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
                 int i = y * stride + x * 4;
-                int a = bytes[i + 3];
-                dark[x, y] = a > 128;
+                if (hasAlpha) {
+                    dark[x, y] = bytes[i + 3] > 128;
+                } else {
+                    int b = bytes[i], g = bytes[i + 1], r = bytes[i + 2];
+                    double lum = (r + g + b) / 3.0;
+                    dark[x, y] = lum < 140;
+                }
             }
         }
 
@@ -68,10 +81,7 @@ public static class RingProcessor {
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
                 int d = dist[x, y];
-                double a;
-                if (d >= erosion + 2) a = 255;
-                else if (d <= erosion) a = 0;
-                else a = 255.0 * (d - erosion) / 2.0;
+                double a = (d > erosion) ? 255 : 0;
 
                 double t = ((x / (double)w) + (y / (double)h)) / 2.0;
                 double cr, cg, cb;
